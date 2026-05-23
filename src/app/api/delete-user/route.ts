@@ -1,29 +1,50 @@
-import { getApps, initializeApp, cert } from "firebase-admin/app";
+import { NextRequest, NextResponse } from "next/server";
+import { adminAuth } from "@/firebase/firebaseAdmin";
 
-import { getAuth } from "firebase-admin/auth";
+export async function POST(
+  request: NextRequest
+) {
+  try {
 
-const firebaseAdminConfig = {
-  credential: cert({
-    projectId:
-      process.env.FIREBASE_PROJECT_ID,
+    const body =
+      await request.json();
 
-    clientEmail:
-      process.env.FIREBASE_CLIENT_EMAIL,
+    const uid =
+      body.uid;
 
-    privateKey:
-      process.env.FIREBASE_PRIVATE_KEY?.replace(
-        /\\n/g,
-        "\n"
-      ),
-  }),
-};
+    if (!uid) {
 
-const app =
-  getApps().length > 0
-    ? getApps()[0]
-    : initializeApp(
-        firebaseAdminConfig
+      return NextResponse.json(
+        {
+          success:false,
+          message:"UID missing"
+        },
+        { status:400 }
       );
 
-export const adminAuth =
-  getAuth(app);
+    }
+
+    await adminAuth.deleteUser(
+      uid
+    );
+
+    return NextResponse.json({
+      success:true
+    });
+
+  } catch(error){
+
+    console.log(
+      "DELETE ERROR:",
+      error
+    );
+
+    return NextResponse.json(
+      {
+        success:false
+      },
+      { status:500 }
+    );
+
+  }
+}

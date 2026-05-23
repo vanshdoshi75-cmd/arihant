@@ -978,11 +978,15 @@ await response.json();
 
 console.log(result);
 
-// WAIT 3 SECONDS
+if (!result.success) {
+  alert("Auth delete failed: " + result.error);
+  return;
+}
 
+// WAIT 5 SECONDS
 await new Promise(
-(resolve)=>
-setTimeout(resolve,3000)
+  (resolve) =>
+    setTimeout(resolve, 5000)
 );
 
 }

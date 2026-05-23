@@ -930,7 +930,7 @@ students.find(
 
 if(studentData?.uid){
 
-await fetch(
+const response = await fetch(
 "/api/delete-user",
 {
 method:"POST",
@@ -941,6 +941,18 @@ body:JSON.stringify({
 uid:studentData.uid
 })
 }
+);
+
+const result =
+await response.json();
+
+console.log(result);
+
+// WAIT 3 SECONDS
+
+await new Promise(
+(resolve)=>
+setTimeout(resolve,3000)
 );
 
 }
@@ -1056,7 +1068,7 @@ facultyList.find(
 
 if(facultyData?.uid){
 
-await fetch(
+const response = await fetch(
 "/api/delete-user",
 {
 method:"POST",
@@ -1067,6 +1079,18 @@ body:JSON.stringify({
 uid:facultyData.uid
 })
 }
+);
+
+const result =
+await response.json();
+
+console.log(result);
+
+// WAIT 3 SECONDS
+
+await new Promise(
+(resolve)=>
+setTimeout(resolve,3000)
 );
 
 }

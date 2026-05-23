@@ -412,10 +412,17 @@ studentContact,
       }
     );
 
-    // SEND EMAIL
- try {
+alert(
+`Student Added Successfully
 
-const res = await fetch(
+Username: ${username}
+
+Password: ${password}`
+);
+
+// SEND MAIL IN BACKGROUND
+
+fetch(
 "/api/send-mail",
 {
 method:"POST",
@@ -428,47 +435,14 @@ username,
 password
 })
 }
-);
-
-const data = await res.json();
-
-console.log("MAIL RESPONSE:", data);
-
-if(data.success){
-
-alert(
-`Student Added Successfully
-
-Username: ${username}
-
-Password: ${password}
-
-Email sent successfully`
-);
-
-}else{
-
-alert(
-`Student Added Successfully
-
-Username: ${username}
-
-Password: ${password}
-
-BUT email sending failed`
-);
-
-console.log(data.error);
-}
-
-}catch(error){
-
-console.log(
-"Email error:",
-error
-);
-
-}
+)
+.then((res)=>res.json())
+.then((data)=>{
+console.log("MAIL:",data);
+})
+.catch((error)=>{
+console.log(error);
+});
 
     setStudentName("");
     setStudentEmail("");
@@ -681,10 +655,17 @@ await createUserWithEmailAndPassword(
       }
    );
 
-   try{
+   alert(
+`Faculty Added Successfully
 
-const res =
-await fetch(
+Username: ${username}
+
+Password: ${password}`
+);
+
+// SEND MAIL IN BACKGROUND
+
+fetch(
 "/api/send-mail",
 {
 method:"POST",
@@ -697,45 +678,14 @@ username,
 password
 })
 }
-);
-
-const data = await res.json();
-
-if(data.success){
-
-alert(
-`Faculty Added Successfully
-
-Username:${username}
-
-Password:${password}
-
-Email sent successfully`
-);
-
-}else{
-
-alert(
-`Faculty Added Successfully
-
-Username:${username}
-
-Password:${password}
-
-BUT email sending failed`
-);
-
-console.log(data.error);
-}
-
-}catch(error){
-
-console.log(
-"Faculty mail error:",
-error
-);
-
-}
+)
+.then((res)=>res.json())
+.then((data)=>{
+console.log("MAIL:",data);
+})
+.catch((error)=>{
+console.log(error);
+});
 
    setFacultyName("");
 

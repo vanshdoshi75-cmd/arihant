@@ -15,6 +15,7 @@ deleteDoc,
 
 import {
   createUserWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 
 import { db, auth } from "@/firebase/firebaseConfig";
@@ -434,6 +435,9 @@ password
 }
 );
 
+await signOut(auth);
+window.location.reload();
+
     alert(
 `Student Added
 
@@ -682,6 +686,9 @@ https://arihant-coaching-3ei5.onrender.com
 - Arihant Coaching`
 })
 });
+
+await signOut(auth);
+window.location.reload();
 
    alert(
 `Faculty Added

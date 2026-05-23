@@ -1,98 +1,71 @@
 import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
 
-export async function POST(
-req: Request
-){
+export async function POST(req: Request) {
 
-try{
+  try {
 
-const {
-email,
-username,
-password
-}
-=
-await req.json();
+    const data = await req.json();
 
-console.log(
-"Sending mail to:",
-email
-);
+    const transporter =
+      nodemailer.createTransport({
 
-const transporter =
-nodemailer.createTransport({
+        service: "gmail",
 
-service:"gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        }
 
-auth:{
-user:
-process.env.EMAIL_USER,
+      });
 
-pass:
-process.env.EMAIL_PASS
-}
+    await transporter.sendMail({
 
-});
+      from: process.env.EMAIL_USER,
 
-const info =
-await transporter.sendMail({
+      to: data.email,
 
-from:
-process.env.EMAIL_USER,
+      subject:
+        "Arihant Coaching Login Credentials",
 
-to:
-email,
+      html: `
 
-subject:
-"Arihant Coaching Login Credentials",
+      <h2>Welcome to Arihant Coaching</h2>
 
-html:`
+      <p>Your account has been created.</p>
 
-<h2>Welcome to Arihant Coaching</h2>
+      <p>
+      <b>Username:</b>
+      ${data.username}
+      </p>
 
-<p>Your account has been created.</p>
+      <p>
+      <b>Password:</b>
+      ${data.password}
+      </p>
 
-<p>
-<b>Username:</b>
-${username}
-</p>
+      `
 
-<p>
-<b>Password:</b>
-${password}
-</p>
+    });
 
-`
+    return NextResponse.json({
+      success: true
+    });
 
-});
+  } catch (error) {
 
-console.log(
-"Mail sent:",
-info.messageId
-);
+    console.log(error);
 
-return NextResponse.json({
-success:true
-});
+    return NextResponse.json(
+      {
+        success: false,
+        error: String(error)
+      },
+      {
+        status: 500
+      }
+    );
 
-}catch(error:any){
-
-console.log(
-"MAIL ERROR:",
-error
-);
-
-return NextResponse.json(
-{
-success:false,
-message:error.message
-},
-{
-status:500
-}
-);
-
-}
+  }
 
 }

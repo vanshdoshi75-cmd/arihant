@@ -369,8 +369,6 @@ const addStudent = async () => {
     const uid =
       userCredential.user.uid;
 
-      await signOut(auth);
-
     const batchData =
       batches.find(
         (batch)=>
@@ -458,6 +456,8 @@ data.error
 .catch((error)=>{
 console.log(error);
 });
+
+await signOut(auth);
 
     setStudentName("");
     setStudentEmail("");
@@ -638,8 +638,6 @@ await createUserWithEmailAndPassword(
    const uid=
    userCredential.user.uid;
 
-   await signOut(auth);
-
    await addDoc(
       collection(
         db,
@@ -716,6 +714,8 @@ data.error
 .catch((error)=>{
 console.log(error);
 });
+
+await signOut(auth);
 
    setFacultyName("");
 

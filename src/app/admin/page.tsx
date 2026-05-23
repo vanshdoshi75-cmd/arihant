@@ -369,7 +369,7 @@ const addStudent = async () => {
     const uid =
       userCredential.user.uid;
 
-      // KEEP ADMIN LOGGED IN
+      await signOut(auth);
 
     const batchData =
       batches.find(
@@ -649,7 +649,7 @@ await createUserWithEmailAndPassword(
    const uid=
    userCredential.user.uid;
 
-   // KEEP ADMIN LOGGED IN
+   await signOut(auth);
 
    await addDoc(
       collection(

@@ -411,7 +411,10 @@ studentContact,
     );
 
     // SEND EMAIL
-    await fetch(
+    try{
+
+const res =
+await fetch(
 "/api/send-mail",
 {
 method:"POST",
@@ -435,8 +438,19 @@ password
 }
 );
 
-await signOut(auth);
-window.location.reload();
+const data=
+await res.json();
+
+console.log(data);
+
+}catch(error){
+
+console.log(
+"Email failed:",
+error
+);
+
+}
 
     alert(
 `Student Added
@@ -659,36 +673,46 @@ await createUserWithEmailAndPassword(
       }
    );
 
-   await fetch("/api/send-mail", {
+   try{
+
+const res=
+await fetch(
+"/api/send-mail",
+{
 method:"POST",
+
 headers:{
-"Content-Type":"application/json"
+"Content-Type":
+"application/json"
 },
+
 body:JSON.stringify({
 
-to: facultyEmail,
+email:
+facultyEmail,
 
-subject:"Arihant Coaching Faculty Account",
+username,
 
-text: `Hello ${facultyName},
+password
 
-Your faculty account has been created.
-
-Username:
-${username}
-
-Password:
-${password}
-
-Login here:
-https://arihant-coaching-3ei5.onrender.com
-
-- Arihant Coaching`
 })
-});
 
-await signOut(auth);
-window.location.reload();
+}
+);
+
+const data=
+await res.json();
+
+console.log(data);
+
+}catch(error){
+
+console.log(
+"Faculty email error:",
+error
+);
+
+}
 
    alert(
 `Faculty Added

@@ -1,7 +1,9 @@
 import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request){
+export async function POST(
+req: Request
+){
 
 try{
 
@@ -13,25 +15,37 @@ password
 =
 await req.json();
 
+console.log(
+"Sending mail to:",
+email
+);
+
 const transporter =
 nodemailer.createTransport({
 
 service:"gmail",
 
 auth:{
-user:process.env.EMAIL_USER,
-pass:process.env.EMAIL_PASS
+user:
+process.env.EMAIL_USER,
+
+pass:
+process.env.EMAIL_PASS
 }
 
 });
 
+const info =
 await transporter.sendMail({
 
-from:process.env.EMAIL_USER,
+from:
+process.env.EMAIL_USER,
 
-to:email,
+to:
+email,
 
-subject:"Arihant Coaching Login Credentials",
+subject:
+"Arihant Coaching Login Credentials",
 
 html:`
 
@@ -39,26 +53,44 @@ html:`
 
 <p>Your account has been created.</p>
 
-<p><b>Username:</b>
-${username}</p>
+<p>
+<b>Username:</b>
+${username}
+</p>
 
-<p><b>Password:</b>
-${password}</p>
+<p>
+<b>Password:</b>
+${password}
+</p>
 
 `
 
 });
 
+console.log(
+"Mail sent:",
+info.messageId
+);
+
 return NextResponse.json({
 success:true
 });
 
-}catch(error){
+}catch(error:any){
 
-console.log(error);
+console.log(
+"MAIL ERROR:",
+error
+);
 
 return NextResponse.json(
-{success:false}
+{
+success:false,
+message:error.message
+},
+{
+status:500
+}
 );
 
 }

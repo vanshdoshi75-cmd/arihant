@@ -22,6 +22,9 @@ export default function LoginPage() {
 
   const router = useRouter();
 
+  const [showPassword, setShowPassword] =
+  useState(false);
+
   const [username, setUsername] =
     useState("");
 
@@ -242,17 +245,41 @@ export default function LoginPage() {
 
           {/* PASSWORD */}
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full border p-4 rounded-xl outline-none focus:border-[#5A1E1E]"
-            value={password}
-            onChange={(e)=>
-              setPassword(
-                e.target.value
-              )
-            }
-          />
+          <div className="relative">
+
+  <input
+    type={
+      showPassword
+        ? "text"
+        : "password"
+    }
+    placeholder="Password"
+    className="w-full border p-4 rounded-xl outline-none focus:border-[#5A1E1E] pr-14"
+    value={password}
+    onChange={(e) =>
+      setPassword(
+        e.target.value
+      )
+    }
+  />
+
+  <button
+    type="button"
+    onClick={() =>
+      setShowPassword(
+        !showPassword
+      )
+    }
+    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+  >
+
+    {showPassword
+      ? "🙈"
+      : "👁️"}
+
+  </button>
+
+</div>
 
           <button
             onClick={loginUser}

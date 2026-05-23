@@ -369,6 +369,8 @@ const addStudent = async () => {
     const uid =
       userCredential.user.uid;
 
+      // KEEP ADMIN LOGGED IN
+
     const batchData =
       batches.find(
         (batch)=>
@@ -464,17 +466,6 @@ console.log(data.error);
 console.log(
 "Email error:",
 error
-);
-
-}
-finally{
-
-alert(
-`Student Added Successfully
-
-Username: ${username}
-
-Password: ${password}`
 );
 
 }
@@ -658,6 +649,8 @@ await createUserWithEmailAndPassword(
    const uid=
    userCredential.user.uid;
 
+   // KEEP ADMIN LOGGED IN
+
    await addDoc(
       collection(
         db,
@@ -706,30 +699,40 @@ password
 }
 );
 
-const data =
-await res.json();
+const data = await res.json();
 
-console.log(
-"MAIL RESPONSE:",
-data
-);
-
-}catch(error){
-
-console.log(
-"Faculty mail error:",
-error
-);
-
-}
-finally{
+if(data.success){
 
 alert(
 `Faculty Added Successfully
 
 Username:${username}
 
-Password:${password}`
+Password:${password}
+
+Email sent successfully`
+);
+
+}else{
+
+alert(
+`Faculty Added Successfully
+
+Username:${username}
+
+Password:${password}
+
+BUT email sending failed`
+);
+
+console.log(data.error);
+}
+
+}catch(error){
+
+console.log(
+"Faculty mail error:",
+error
 );
 
 }

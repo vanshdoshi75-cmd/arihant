@@ -619,7 +619,7 @@ Math.random()
 const userCredential =
 await createUserWithEmailAndPassword(
    auth,
-   username,
+   facultyEmail,
    password
 );
    const uid=

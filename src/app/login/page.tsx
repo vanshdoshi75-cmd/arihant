@@ -243,9 +243,9 @@ export default function LoginPage() {
             }
           />
 
-          {/* PASSWORD */}
+         {/* PASSWORD */}
 
-          <div className="relative">
+<div className="relative">
 
   <input
     type={
@@ -254,7 +254,7 @@ export default function LoginPage() {
         : "password"
     }
     placeholder="Password"
-    className="w-full border p-4 rounded-xl outline-none focus:border-[#5A1E1E] pr-14"
+    className="w-full border p-4 rounded-xl outline-none focus:border-[#5A1E1E] pr-16"
     value={password}
     onChange={(e) =>
       setPassword(
@@ -263,21 +263,26 @@ export default function LoginPage() {
     }
   />
 
-  <button
-    type="button"
+  <span
     onClick={() =>
       setShowPassword(
         !showPassword
       )
     }
-    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
+    className="
+      absolute
+      right-5
+      top-1/2
+      -translate-y-1/2
+      cursor-pointer
+      text-xl
+      select-none
+    "
   >
-
     {showPassword
       ? "🙈"
       : "👁️"}
-
-  </button>
+  </span>
 
 </div>
 

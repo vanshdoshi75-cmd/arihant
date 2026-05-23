@@ -678,44 +678,40 @@ Password: ${password}`
 
 // SEND MAIL IN BACKGROUND
 
-fetch(
-"/api/send-mail",
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-email:facultyEmail,
-username,
-password
-})
+try {
+
+  const mailRes = await fetch(
+    "/api/send-mail",
+    {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        email:studentEmail,
+        username,
+        password
+      })
+    }
+  );
+
+  const mailData =
+    await mailRes.json();
+
+  console.log("MAIL:", mailData);
+
+  if(!mailData.success){
+    alert("MAIL ERROR: " + mailData.error);
+  }
+
+} catch(error:any) {
+
+  alert("MAIL FETCH ERROR: " + error.message);
+
 }
-)
-.then((res)=>res.json())
-.then((data)=>{
-
-console.log("MAIL:",data);
-
-if(data.success){
-
-alert("Mail Sent Successfully");
-
-}else{
-
-alert(
-"MAIL ERROR: " +
-data.error
-);
-
-}
-
-})
-.catch((error)=>{
-console.log(error);
-});
 
 await signOut(auth);
+
 
    setFacultyName("");
 

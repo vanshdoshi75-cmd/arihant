@@ -1,52 +1,29 @@
-import { NextResponse }
-from "next/server";
+import { getApps, initializeApp, cert } from "firebase-admin/app";
 
-import { adminAuth }
-from "@/firebase/firebaseAdmin";
+import { getAuth } from "firebase-admin/auth";
 
-export async function POST(
-req:Request
-){
+const firebaseAdminConfig = {
+  credential: cert({
+    projectId:
+      process.env.FIREBASE_PROJECT_ID,
 
-try{
+    clientEmail:
+      process.env.FIREBASE_CLIENT_EMAIL,
 
-const { uid } =
-await req.json();
+    privateKey:
+      process.env.FIREBASE_PRIVATE_KEY?.replace(
+        /\\n/g,
+        "\n"
+      ),
+  }),
+};
 
-console.log(
-"Deleting UID:",
-uid
-);
+const app =
+  getApps().length > 0
+    ? getApps()[0]
+    : initializeApp(
+        firebaseAdminConfig
+      );
 
-await adminAuth.deleteUser(
-uid
-);
-
-console.log(
-"Deleted successfully"
-);
-
-return NextResponse.json({
-success:true
-});
-
-}catch(error:any){
-
-console.log(
-"DELETE USER ERROR:",
-error
-);
-
-return NextResponse.json(
-{
-success:false,
-message:error.message
-},
-{
-status:500
-}
-);
-
-}
-
-}
+export const adminAuth =
+  getAuth(app);

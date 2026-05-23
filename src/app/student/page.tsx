@@ -274,11 +274,23 @@ homeworkData
 
         rankingSnapshot.forEach((doc) => {
 
-          allResults.push(
-            doc.data()
-          );
+const data = doc.data();
 
-        });
+if(
+data.studentId &&
+data.studentName
+){
+
+allResults.push({
+
+id:doc.id,
+...data
+
+});
+
+}
+
+});
 
         setRankings(allResults);
 
@@ -325,8 +337,8 @@ filtered.forEach(
 (item:any)=>{
 
 if(
-!item.studentId
-)return;
+!item.studentId)
+return;
 
 if(
 !totals[item.studentId]

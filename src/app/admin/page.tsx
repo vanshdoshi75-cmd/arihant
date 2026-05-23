@@ -951,6 +951,9 @@ uid:studentData.uid
 
 }
 
+try{
+
+// delete student document
 await deleteDoc(
 doc(
 db,
@@ -959,9 +962,60 @@ studentId
 )
 );
 
+// delete all student results
+const resultQuery =
+query(
+collection(db,"results"),
+where(
+"studentId",
+"==",
+studentId
+)
+);
+
+const resultSnapshot =
+await getDocs(
+resultQuery
+);
+
+for(
+const resultDoc
+of resultSnapshot.docs
+){
+
+await deleteDoc(
+doc(
+db,
+"results",
+resultDoc.id
+)
+);
+
+}
+
 alert(
 "Student deleted successfully"
 );
+
+if(selectedBatch){
+
+loadBatchDetails(
+selectedBatch
+);
+
+}
+
+}catch(error){
+
+console.log(error);
+
+alert(
+"Error deleting student"
+);
+
+}
+
+setStudents([]);
 
 if(selectedBatch){
 

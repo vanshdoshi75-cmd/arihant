@@ -438,7 +438,22 @@ password
 )
 .then((res)=>res.json())
 .then((data)=>{
+
 console.log("MAIL:",data);
+
+if(data.success){
+
+alert("Mail Sent Successfully");
+
+}else{
+
+alert(
+"MAIL ERROR: " +
+data.error
+);
+
+}
+
 })
 .catch((error)=>{
 console.log(error);
@@ -681,7 +696,22 @@ password
 )
 .then((res)=>res.json())
 .then((data)=>{
+
 console.log("MAIL:",data);
+
+if(data.success){
+
+alert("Mail Sent Successfully");
+
+}else{
+
+alert(
+"MAIL ERROR: " +
+data.error
+);
+
+}
+
 })
 .catch((error)=>{
 console.log(error);

@@ -13,19 +13,34 @@ try{
 const { uid } =
 await req.json();
 
-await adminAuth.deleteUser(uid);
+console.log(
+"Deleting UID:",
+uid
+);
+
+await adminAuth.deleteUser(
+uid
+);
+
+console.log(
+"Deleted successfully"
+);
 
 return NextResponse.json({
 success:true
 });
 
-}catch(error){
+}catch(error:any){
 
-console.log(error);
+console.log(
+"DELETE USER ERROR:",
+error
+);
 
 return NextResponse.json(
 {
-success:false
+success:false,
+message:error.message
 },
 {
 status:500

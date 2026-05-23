@@ -600,16 +600,28 @@ const addFacultyAssignment =
       return;
    }
 
-   const password=
-   "Faculty@123";
+   const username =
+facultyName
+.toLowerCase()
+.replace(/\s/g,"")
++ "@arihant.com";
 
-   const userCredential=
-   await createUserWithEmailAndPassword(
-      auth,
-      facultyEmail,
-      password
-   );
+const password =
+"Fac" +
+Math.floor(
+1000 + Math.random()*9000
+) +
+"@" +
+Math.random()
+.toString(36)
+.substring(2,5);
 
+const userCredential =
+await createUserWithEmailAndPassword(
+   auth,
+   username,
+   password
+);
    const uid=
    userCredential.user.uid;
 
@@ -628,6 +640,8 @@ const addFacultyAssignment =
         email:
         facultyEmail,
 
+        username,
+
         password,
 
         role:
@@ -641,11 +655,39 @@ const addFacultyAssignment =
       }
    );
 
+   await fetch("/api/send-mail", {
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+
+to: facultyEmail,
+
+subject:"Arihant Coaching Faculty Account",
+
+text: `Hello ${facultyName},
+
+Your faculty account has been created.
+
+Username:
+${username}
+
+Password:
+${password}
+
+Login here:
+https://arihant-coaching-3ei5.onrender.com
+
+- Arihant Coaching`
+})
+});
+
    alert(
 `Faculty Added
 
-Email:
-${facultyEmail}
+Username:
+${username}
 
 Password:
 ${password}`

@@ -2,49 +2,42 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 export async function POST(req: Request) {
-
   try {
+    const { email, username, password } =
+      await req.json();
 
-    const {
-      email,
-      username,
-      password,
-    } = await req.json();
+    if (!email || !username || !password) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Missing email, username, or password",
+        },
+        { status: 400 }
+      );
+    }
 
     const transporter =
       nodemailer.createTransport({
-        service: "gmail",
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
         auth: {
-          user:
-            process.env.EMAIL_USER,
-          pass:
-            process.env.EMAIL_PASS,
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
         },
       });
 
+    await transporter.verify();
+
     await transporter.sendMail({
-      from:
-        process.env.EMAIL_USER,
-
+      from: `"Arihant Coaching" <${process.env.EMAIL_USER}>`,
       to: email,
-
-      subject:
-        "Arihant Coaching Login Details",
-
+      subject: "Arihant Coaching Login Details",
       html: `
         <h2>Arihant Coaching</h2>
-
         <p>Your account has been created.</p>
-
-        <p>
-          <b>Username:</b>
-          ${username}
-        </p>
-
-        <p>
-          <b>Password:</b>
-          ${password}
-        </p>
+        <p><b>Username:</b> ${username}</p>
+        <p><b>Password:</b> ${password}</p>
       `,
     });
 
@@ -53,17 +46,14 @@ export async function POST(req: Request) {
     });
 
   } catch (error: any) {
-
-    console.log(error);
+    console.log("MAIL API ERROR:", error);
 
     return NextResponse.json(
       {
         success: false,
         error: error.message,
       },
-      {
-        status: 500,
-      }
+      { status: 500 }
     );
   }
 }

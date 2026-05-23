@@ -392,13 +392,13 @@ homeworkData
   }
 
   return (
-    <main className="min-h-screen bg-[#F8F4EF] p-6">
+    <main className="min-h-screen bg-[#F8F4EF] p-3 md:p-6">
 
       {/* PROFILE */}
 
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
-        <h1 className="text-5xl font-bold text-[#5A1E1E]">
+        <h1 className="text-2xl md:text-5xl font-bold text-[#5A1E1E]">
           {studentData.name}
         </h1>
 
@@ -418,7 +418,7 @@ homeworkData
 
       {/* ATTENDANCE OVERVIEW */}
 
-      <div className="grid md:grid-cols-3 gap-5 mt-8 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8 mb-10">
 
         <div className="bg-green-50 rounded-2xl p-5">
 

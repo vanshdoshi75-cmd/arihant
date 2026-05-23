@@ -971,9 +971,9 @@ alert(
 
   return (
 
-    <main className="min-h-screen bg-[#F8F4EF] p-6">
+   <main className="min-h-screen bg-[#F8F4EF] p-3 md:p-6">
 
-      <h1 className="text-5xl font-bold text-[#5A1E1E] mb-10">
+      <h1 className="text-3xl md:text-5xl font-bold text-[#5A1E1E] mb-10">
         Admin Dashboard
       </h1>
 
@@ -981,9 +981,9 @@ alert(
       {/* CREATE BATCH */}
       {/* ========================= */}
 
-      <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
+      <div className="bg-white rounded-2xl md:text-3xl shadow-xl p-6 mb-10">
 
-        <h2 className="text-3xl font-bold mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6">
           Create Batch
         </h2>
 
@@ -1097,7 +1097,7 @@ alert(
 
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
-        <h2 className="text-3xl font-bold mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6">
           Add Student
         </h2>
 
@@ -1182,7 +1182,7 @@ e.target.value
 
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
-        <h2 className="text-3xl font-bold mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6">
           Add Faculty
         </h2>
 
@@ -1344,7 +1344,7 @@ Remove
 
 <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
-  <h2 className="text-3xl font-bold mb-6">
+  <h2 className="text-2xl md:text-3xl font-bold mb-6">
     Mark Attendance
   </h2>
 
@@ -1399,7 +1399,7 @@ Remove
 
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
 
               <button
                 onClick={() =>
@@ -1463,7 +1463,7 @@ Remove
 
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
-        <h2 className="text-3xl font-bold mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6">
           All Batches
         </h2>
 
@@ -1509,7 +1509,7 @@ Remove
 
     <div className="bg-white rounded-3xl shadow-xl p-8">
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
 
         <div>
 
@@ -1568,7 +1568,7 @@ Remove
 
       {/* STATS */}
 
-      <div className="grid md:grid-cols-3 gap-5 mt-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-10">
 
         <div className="bg-blue-50 rounded-2xl p-6">
 
@@ -1618,7 +1618,7 @@ Remove
 
   <div className="flex items-center justify-between mb-6">
 
-    <h2 className="text-3xl font-bold">
+    <h2 className="text-2xl md:text-3xl font-bold">
       Students
     </h2>
 
@@ -1639,7 +1639,7 @@ Remove
           className="border rounded-2xl p-5 hover:shadow-lg transition"
         >
 
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
 
             <div>
 
@@ -1659,7 +1659,7 @@ Remove
 
             </div>
 
-           <div className="flex gap-2">
+           <div className="flex flex-col md:flex-row gap-2">
 
 <button
 onClick={() =>
@@ -1691,7 +1691,7 @@ Delete
     className="border p-2 rounded-xl w-full"
   />
 
-  <div className="flex gap-2">
+  <div className="flex flex-col md:flex-row gap-2">
 
     <button
       onClick={() => {
@@ -1779,7 +1779,7 @@ Delete
 
       <div className="flex items-center justify-between mb-6">
 
-        <h2 className="text-3xl font-bold">
+        <h2 className="text-2xl md:text-3xl font-bold">
           Faculty
         </h2>
 

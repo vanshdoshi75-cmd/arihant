@@ -214,9 +214,9 @@ export default function LoginPage() {
 
     <main className="min-h-screen bg-[#F8F4EF] flex items-center justify-center p-6">
 
-      <div className="bg-white p-10 rounded-3xl shadow-xl w-full max-w-md">
+      <div className="bg-white p-6 md:p-10 rounded-3xl shadow-xl w-full max-w-md">
 
-        <h1 className="text-4xl font-bold text-center text-[#5A1E1E] mb-3">
+        <h1 className="text-2xl md:text-4x1 font-bold text-center text-[#5A1E1E] mb-3">
           Arihant Coaching
         </h1>
 
@@ -257,7 +257,7 @@ export default function LoginPage() {
           <button
             onClick={loginUser}
             disabled={loading}
-            className="w-full bg-[#5A1E1E] text-white py-4 rounded-xl disabled:opacity-50"
+            className="w-full bg-[#5A1E1E] text-white py-3 md:py-4 rounded-xl text-base md:text-lg"
           >
 
             {loading

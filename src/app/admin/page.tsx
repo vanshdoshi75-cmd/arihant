@@ -411,58 +411,73 @@ studentContact,
     );
 
     // SEND EMAIL
-    try{
+ try {
 
-const res =
-await fetch(
+const res = await fetch(
 "/api/send-mail",
 {
 method:"POST",
-
 headers:{
-"Content-Type":
-"application/json"
+"Content-Type":"application/json"
 },
-
 body:JSON.stringify({
-
-email:
-studentEmail,
-
+email:studentEmail,
 username,
-
 password
-
 })
-
 }
 );
 
-const data=
-await res.json();
+const data = await res.json();
 
-console.log(data);
+console.log("MAIL RESPONSE:", data);
+
+if(data.success){
+
+alert(
+`Student Added Successfully
+
+Username: ${username}
+
+Password: ${password}
+
+Email sent successfully`
+);
+
+}else{
+
+alert(
+`Student Added Successfully
+
+Username: ${username}
+
+Password: ${password}
+
+BUT email sending failed`
+);
+
+console.log(data.error);
+}
 
 }catch(error){
 
 console.log(
-"Email failed:",
+"Email error:",
 error
 );
 
 }
+finally{
 
-    alert(
-`Student Added
+alert(
+`Student Added Successfully
 
-Username:
-${username}
+Username: ${username}
 
-Password:
-${password}
+Password: ${password}`
+);
 
-Credentials sent on Gmail`
-    );
+}
 
     setStudentName("");
     setStudentEmail("");
@@ -675,52 +690,49 @@ await createUserWithEmailAndPassword(
 
    try{
 
-const res=
+const res =
 await fetch(
 "/api/send-mail",
 {
 method:"POST",
-
 headers:{
 "Content-Type":"application/json"
 },
-
 body:JSON.stringify({
-
 email:facultyEmail,
-
 username,
-
 password
-
 })
-
 }
 );
 
-const data=
+const data =
 await res.json();
 
-console.log(data);
+console.log(
+"MAIL RESPONSE:",
+data
+);
 
 }catch(error){
 
 console.log(
-"Faculty email error:",
+"Faculty mail error:",
 error
 );
 
 }
+finally{
 
-   alert(
-`Faculty Added
+alert(
+`Faculty Added Successfully
 
-Username:
-${username}
+Username:${username}
 
-Password:
-${password}`
-   );
+Password:${password}`
+);
+
+}
 
    setFacultyName("");
 

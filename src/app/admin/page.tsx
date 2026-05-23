@@ -929,6 +929,28 @@ if(!confirmDelete) return;
 
 try{
 
+const studentData =
+students.find(
+(s)=>s.id===studentId
+);
+
+if(studentData?.uid){
+
+await fetch(
+"/api/delete-user",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+uid:studentData.uid
+})
+}
+);
+
+}
+
 await deleteDoc(
 doc(
 db,
@@ -978,6 +1000,28 @@ window.confirm(
 if(!confirmDelete) return;
 
 try{
+
+const facultyData =
+facultyList.find(
+(f)=>f.id===facultyId
+);
+
+if(facultyData?.uid){
+
+await fetch(
+"/api/delete-user",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+uid:facultyData.uid
+})
+}
+);
+
+}
 
 await deleteDoc(
 doc(

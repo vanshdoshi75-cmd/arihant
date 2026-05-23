@@ -307,49 +307,60 @@ homeworkData
   // FILTERED RANKINGS
   // =========================
 
-  const filteredRankings =
-    useMemo(() => {
+const filteredRankings =
+useMemo(() => {
 
-      const filtered =
-        selectedRankingExam
-          ? rankings.filter(
-              (item) =>
-                item.examName ===
-                selectedRankingExam
-            )
-          : rankings;
+const filtered =
+selectedRankingExam
+? rankings.filter(
+(item:any)=>
+item.examName===
+selectedRankingExam
+)
+: rankings;
 
-      const totals: any = {};
+const totals:any={};
 
-      filtered.forEach((item) => {
+filtered.forEach(
+(item:any)=>{
 
-        if (
-          !totals[item.studentName]
-        ) {
+if(
+!item.studentId
+)return;
 
-          totals[item.studentName] = 0;
-        }
+if(
+!totals[item.studentId]
+){
 
-        totals[item.studentName] +=
-          item.marks;
-      });
+totals[item.studentId]={
 
-     return Object.entries(totals)
-  .map(
-    ([name, total]) => ({
-      name,
-      total: Number(total),
-    })
-  )
-        .sort(
-          (a: any, b: any) =>
-            b.total - a.total
-        );
+name:item.studentName,
 
-    }, [
-      rankings,
-      selectedRankingExam,
-    ]);
+total:0
+
+};
+
+}
+
+totals[item.studentId].total +=
+item.marks;
+
+}
+);
+
+return (
+Object.values(
+totals
+) as any[]
+).sort(
+(a:any,b:any)=>
+b.total-a.total
+);
+
+},[
+rankings,
+selectedRankingExam
+]);
 
   // =========================
   // CALCULATIONS
@@ -757,7 +768,7 @@ homeworkData
             <tbody>
 
               {filteredRankings.map(
-                (student, index) => (
+                (student:any, index:number) => (
 
                   <tr
                     key={index}

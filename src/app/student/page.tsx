@@ -254,49 +254,73 @@ homeworkData
         setResults(resultData);
 
         // =========================
-        // LOAD RANKINGS
-        // =========================
+// LOAD RANKINGS
+// =========================
 
-        const rankingQuery =
-          query(
-            collection(db, "results"),
-            where(
-              "batchId",
-              "==",
-              currentStudent.batchId
-            )
-          );
+// get current students in batch
+const studentQuery = query(
+  collection(db,"students"),
+  where(
+    "batchId",
+    "==",
+    currentStudent.batchId
+  )
+);
 
-        const rankingSnapshot =
-          await getDocs(rankingQuery);
+const studentSnap =
+await getDocs(studentQuery);
 
-        const allResults: any[] = [];
+const validStudentIds =
+studentSnap.docs.map(
+(doc)=>doc.id
+);
 
-        rankingSnapshot.forEach((doc) => {
+// get ranking data
+const rankingQuery =
+query(
+collection(db,"results"),
+where(
+"batchId",
+"==",
+currentStudent.batchId
+)
+);
 
-const data = doc.data();
+const rankingSnapshot =
+await getDocs(
+rankingQuery
+);
+
+const allResults:any[]=[];
+
+rankingSnapshot.forEach(
+(doc)=>{
+
+const data=doc.data();
 
 if(
-data.studentId &&
-data.studentName
+validStudentIds.includes(
+data.studentId
+)
 ){
 
 allResults.push({
-
 id:doc.id,
 ...data
-
 });
 
 }
 
+}
+);
+
+setRankings(
+allResults
+);
+
+setAuthLoading(false);
+
 });
-
-        setRankings(allResults);
-
-        setAuthLoading(false);
-
-      });
 
     return () => unsubscribe();
 
@@ -331,14 +355,21 @@ selectedRankingExam
 )
 : rankings;
 
-const totals:any={};
+const totals:
+Record<
+string,
+{
+name:string;
+total:number;
+}
+>={};
 
 filtered.forEach(
 (item:any)=>{
 
 if(
-!item.studentId)
-return;
+!item.studentId
+) return;
 
 if(
 !totals[item.studentId]
@@ -346,7 +377,8 @@ if(
 
 totals[item.studentId]={
 
-name:item.studentName,
+name:
+item.studentName,
 
 total:0
 
@@ -354,18 +386,18 @@ total:0
 
 }
 
-totals[item.studentId].total +=
-item.marks;
+totals[
+item.studentId
+].total +=
+Number(item.marks||0);
 
 }
 );
 
-return (
-Object.values(
+return Object.values(
 totals
-) as any[]
 ).sort(
-(a:any,b:any)=>
+(a,b)=>
 b.total-a.total
 );
 

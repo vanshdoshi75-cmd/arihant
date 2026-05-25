@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-
-import { useRouter }
-from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import {
   auth,
@@ -30,15 +28,11 @@ export default function StudentPage() {
   const [authLoading, setAuthLoading] =
     useState(true);
 
-  // =========================
-  // STATES
-  // =========================
-
   const [studentData, setStudentData] =
     useState<any>(null);
 
-    const [homeworks, setHomeworks] =
-  useState<any[]>([]);
+  const [homeworks, setHomeworks] =
+    useState<any[]>([]);
 
   const [results, setResults] =
     useState<any[]>([]);
@@ -48,7 +42,6 @@ export default function StudentPage() {
 
   const [rankings, setRankings] =
     useState<any[]>([]);
-    
 
   const [selectedResultExam, setSelectedResultExam] =
     useState("");
@@ -56,388 +49,309 @@ export default function StudentPage() {
   const [selectedRankingExam, setSelectedRankingExam] =
     useState("");
 
-  // =========================
-  // LOAD STUDENT
-  // =========================
-
   useEffect(() => {
 
     const unsubscribe =
-      onAuthStateChanged(auth,
+      onAuthStateChanged(
+        auth,
         async (user) => {
 
-        if (!user) {
+          try {
 
-          router.push("/");
+            if (!user) {
 
-          setAuthLoading(false);
+              setAuthLoading(false);
 
-          return;
-        }
+              router.push("/");
 
-        // LOAD STUDENT
+              return;
+            }
 
-        const studentSnapshot =
-          await getDocs(
-            collection(db, "students")
-          );
+            const studentQuery =
+              query(
+                collection(db, "students"),
+                where(
+                  "email",
+                  "==",
+                  user.email
+                )
+              );
 
-        let currentStudent: any =
-          null;
+            const studentSnapshot =
+              await getDocs(studentQuery);
 
-        studentSnapshot.forEach((doc) => {
+            if (studentSnapshot.empty) {
 
-          const data = doc.data();
+              setStudentData(null);
 
-          if (
-            data.email === user.email
-          ) {
+              setAuthLoading(false);
 
-            currentStudent = {
-              id: doc.id,
-              ...data,
+              return;
+            }
+
+            const studentDoc =
+              studentSnapshot.docs[0];
+
+            const currentStudent: any = {
+              id: studentDoc.id,
+              ...studentDoc.data(),
             };
 
-            setStudentData(
-              currentStudent
-            );
+            setStudentData(currentStudent);
+
+            const examQuery =
+              query(
+                collection(db, "exams"),
+                where(
+                  "batchId",
+                  "==",
+                  currentStudent.batchId
+                )
+              );
+
+            const examSnapshot =
+              await getDocs(examQuery);
+
+            const examData: any[] = [];
+
+            examSnapshot.forEach((docu) => {
+
+              examData.push({
+                id: docu.id,
+                ...docu.data(),
+              });
+
+            });
+
+            const today =
+              new Date();
+
+            const upcomingOnly =
+              examData.filter((exam) => {
+
+                const examDate =
+                  new Date(exam.examDate);
+
+                return examDate >= today;
+              });
+
+            setExams(upcomingOnly);
+
+            const homeworkQuery =
+              query(
+                collection(db, "homework"),
+                where(
+                  "batchId",
+                  "==",
+                  currentStudent.batchId
+                )
+              );
+
+            const homeworkSnapshot =
+              await getDocs(homeworkQuery);
+
+            const homeworkData: any[] = [];
+
+            for (const hwDoc of homeworkSnapshot.docs) {
+
+              const hw: any = {
+                id: hwDoc.id,
+                ...hwDoc.data(),
+              };
+
+              const statusRef =
+                doc(
+                  db,
+                  "homeworkStatus",
+                  `${hw.id}_${currentStudent.id}`
+                );
+
+              const statusSnap =
+                await getDoc(statusRef);
+
+              if (statusSnap.exists()) {
+
+                const statusData =
+                  statusSnap.data();
+
+                if (
+                  statusData.status === "done"
+                ) {
+
+                  continue;
+                }
+              }
+
+              homeworkData.push(hw);
+            }
+
+            setHomeworks(homeworkData);
+
+            const resultQuery =
+              query(
+                collection(db, "results"),
+                where(
+                  "studentId",
+                  "==",
+                  currentStudent.id
+                )
+              );
+
+            const resultSnapshot =
+              await getDocs(resultQuery);
+
+            const resultData: any[] = [];
+
+            resultSnapshot.forEach((docu) => {
+
+              resultData.push({
+                id: docu.id,
+                ...docu.data(),
+              });
+
+            });
+
+            setResults(resultData);
+
+            const batchStudentQuery =
+              query(
+                collection(db, "students"),
+                where(
+                  "batchId",
+                  "==",
+                  currentStudent.batchId
+                )
+              );
+
+            const batchStudentSnap =
+              await getDocs(batchStudentQuery);
+
+            const validStudentIds =
+              batchStudentSnap.docs.map(
+                (docu) => docu.id
+              );
+
+            const rankingQuery =
+              query(
+                collection(db, "results"),
+                where(
+                  "batchId",
+                  "==",
+                  currentStudent.batchId
+                )
+              );
+
+            const rankingSnapshot =
+              await getDocs(rankingQuery);
+
+            const allResults: any[] = [];
+
+            rankingSnapshot.forEach((docu) => {
+
+              const data = docu.data();
+
+              if (
+                validStudentIds.includes(
+                  data.studentId
+                )
+              ) {
+
+                allResults.push({
+                  id: docu.id,
+                  ...data,
+                });
+              }
+            });
+
+            setRankings(allResults);
+
+            setAuthLoading(false);
+
+          } catch (error) {
+
+            console.log(error);
+
+            setAuthLoading(false);
           }
-        });
-
-        if (!currentStudent) {
-
-          setAuthLoading(false);
-
-          return;
         }
-
-        // =========================
-        // LOAD EXAMS
-        // =========================
-
-        const examQuery =
-          query(
-            collection(db, "exams"),
-            where(
-              "batchId",
-              "==",
-              currentStudent.batchId
-            )
-          );
-
-        const examSnapshot =
-          await getDocs(examQuery);
-
-        const examData: any[] = [];
-
-        examSnapshot.forEach((doc) => {
-
-          examData.push({
-            id: doc.id,
-            ...doc.data(),
-          });
-
-        });
-
-        const today = new Date();
-
-const upcomingOnly = examData.filter((exam)=>{
-
-  const examDate = new Date(
-    exam.examDate
-  );
-
-  return examDate >= today;
-
-});
-
-setExams(upcomingOnly);
-
- // =========================
-// LOAD HOMEWORK
-// only pending homework
-// =========================
-
-const homeworkQuery =
-query(
-collection(db,"homework"),
-where(
-"batchId",
-"==",
-currentStudent.batchId
-)
-);
-
-const homeworkSnapshot =
-await getDocs(
-homeworkQuery
-);
-
-const homeworkData:any[]=[];
-
-for(
-const hwDoc
-of homeworkSnapshot.docs
-){
-
-const hw={
-
-id:hwDoc.id,
-...hwDoc.data()
-
-};
-
-const statusRef=
-doc(
-db,
-"homeworkStatus",
-`${hw.id}_${currentStudent.id}`
-);
-
-const statusSnap=
-await getDoc(
-statusRef
-);
-
-if(
-statusSnap.exists()
-){
-
-const statusData=
-statusSnap.data();
-
-if(
-statusData.status==="done"
-){
-
-continue;
-}
-
-}
-
-homeworkData.push(hw);
-
-}
-
-setHomeworks(
-homeworkData
-);
-
-        // =========================
-        // LOAD RESULTS
-        // =========================
-
-        const resultQuery =
-          query(
-            collection(db, "results"),
-            where(
-              "studentId",
-              "==",
-              currentStudent.id
-            )
-          );
-
-        const resultSnapshot =
-          await getDocs(resultQuery);
-
-        const resultData: any[] = [];
-
-        resultSnapshot.forEach((doc) => {
-
-          resultData.push({
-            id: doc.id,
-            ...doc.data(),
-          });
-
-        });
-
-        setResults(resultData);
-
-        // =========================
-// LOAD RANKINGS
-// =========================
-
-// get current students in batch
-const studentQuery = query(
-  collection(db,"students"),
-  where(
-    "batchId",
-    "==",
-    currentStudent.batchId
-  )
-);
-
-const studentSnap =
-await getDocs(studentQuery);
-
-const validStudentIds =
-studentSnap.docs.map(
-(doc)=>doc.id
-);
-
-// get ranking data
-const rankingQuery =
-query(
-collection(db,"results"),
-where(
-"batchId",
-"==",
-currentStudent.batchId
-)
-);
-
-const rankingSnapshot =
-await getDocs(
-rankingQuery
-);
-
-const allResults:any[]=[];
-
-rankingSnapshot.forEach(
-(doc)=>{
-
-const data=doc.data();
-
-if(
-validStudentIds.includes(
-data.studentId
-)
-){
-
-allResults.push({
-id:doc.id,
-...data
-});
-
-}
-
-}
-);
-
-setRankings(
-allResults
-);
-
-setAuthLoading(false);
-
-});
+      );
 
     return () => unsubscribe();
 
   }, [router]);
 
-  // =========================
-  // FILTERED RESULTS
-  // =========================
-
   const filteredResults =
     selectedResultExam
       ? results.filter(
           (result) =>
-            result.examName ===
-            selectedResultExam
+            result.examName === selectedResultExam
         )
       : results;
 
-  // =========================
-  // FILTERED RANKINGS
-  // =========================
+  const filteredRankings =
+    useMemo(() => {
 
-const filteredRankings =
-useMemo(() => {
+      const filtered =
+        selectedRankingExam
+          ? rankings.filter(
+              (item: any) =>
+                item.examName === selectedRankingExam
+            )
+          : rankings;
 
-const filtered =
-selectedRankingExam
-? rankings.filter(
-(item:any)=>
-item.examName===
-selectedRankingExam
-)
-: rankings;
+      const totals: Record<
+        string,
+        {
+          name: string;
+          total: number;
+        }
+      > = {};
 
-const totals:
-Record<
-string,
-{
-name:string;
-total:number;
-}
->={};
+      filtered.forEach((item: any) => {
 
-filtered.forEach(
-(item:any)=>{
+        if (!item.studentId) return;
 
-if(
-!item.studentId
-) return;
+        if (!totals[item.studentId]) {
 
-if(
-!totals[item.studentId]
-){
+          totals[item.studentId] = {
+            name: item.studentName,
+            total: 0,
+          };
+        }
 
-totals[item.studentId]={
+        totals[item.studentId].total +=
+          Number(item.marks || 0);
+      });
 
-name:
-item.studentName,
+      return Object.values(totals).sort(
+        (a, b) => b.total - a.total
+      );
 
-total:0
-
-};
-
-}
-
-totals[
-item.studentId
-].total +=
-Number(item.marks||0);
-
-}
-);
-
-return Object.values(
-totals
-).sort(
-(a,b)=>
-b.total-a.total
-);
-
-},[
-rankings,
-selectedRankingExam
-]);
-
-  // =========================
-  // CALCULATIONS
-  // =========================
+    }, [rankings, selectedRankingExam]);
 
   const totalObtained =
     filteredResults.reduce(
       (sum, item) =>
-        sum + item.marks,
+        sum + Number(item.marks || 0),
       0
     );
 
   const totalMarks =
     filteredResults.reduce(
       (sum, item) =>
-        sum + item.totalMarks,
+        sum + Number(item.totalMarks || 0),
       0
     );
 
   const overallPercentage =
     totalMarks > 0
       ? (
-          (totalObtained /
-            totalMarks) *
+          (totalObtained / totalMarks) *
           100
         ).toFixed(1)
       : 0;
 
-  // =========================
-  // LOADING
-  // =========================
-
-  if (authLoading || !studentData) {
+  if (authLoading) {
 
     return (
       <main className="min-h-screen flex items-center justify-center text-4xl font-bold">
@@ -446,10 +360,18 @@ selectedRankingExam
     );
   }
 
-  return (
-    <main className="min-h-screen bg-[#F8F4EF] p-3 md:p-6">
+  if (!studentData) {
 
-      {/* PROFILE */}
+    return (
+      <main className="min-h-screen flex items-center justify-center text-3xl font-bold">
+        Student Not Found
+      </main>
+    );
+  }
+
+  return (
+
+    <main className="min-h-screen bg-[#F8F4EF] p-3 md:p-6">
 
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
@@ -462,8 +384,7 @@ selectedRankingExam
         </p>
 
         <p className="text-xl mt-2">
-          Overall Percentage:
-          {" "}
+          Overall Percentage:{" "}
           <span className="font-bold">
             {overallPercentage}%
           </span>
@@ -471,9 +392,7 @@ selectedRankingExam
 
       </div>
 
-      {/* ATTENDANCE OVERVIEW */}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8 mb-10">
 
         <div className="bg-green-50 rounded-2xl p-5">
 
@@ -525,8 +444,6 @@ selectedRankingExam
 
       </div>
 
-      {/* UPCOMING EXAMS */}
-
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
         <h2 className="text-3xl font-bold mb-6">
@@ -535,99 +452,89 @@ selectedRankingExam
 
         <div className="space-y-4">
 
-          {exams.map((exam) => (
+          {exams.length === 0 ? (
 
-            <div
-              key={exam.id}
-              className="bg-gray-100 p-4 rounded-xl"
-            >
+            <p className="text-gray-500">
+              No upcoming exams
+            </p>
 
-              <h3 className="font-bold text-xl">
-                {exam.examName}
-              </h3>
+          ) : (
 
-              <p>
-                Subject:
-                {" "}
-                {exam.subject}
-              </p>
+            exams.map((exam) => (
 
-              <p>
-                Date:
-                {" "}
-                {exam.examDate}
-              </p>
+              <div
+                key={exam.id}
+                className="bg-gray-100 p-4 rounded-xl"
+              >
 
-              <p>
-                Total Marks:
-                {" "}
-                {exam.totalMarks}
-              </p>
+                <h3 className="font-bold text-xl">
+                  {exam.examName}
+                </h3>
 
-            </div>
+                <p>Subject: {exam.subject}</p>
 
-          ))}
+                <p>Date: {exam.examDate}</p>
+
+                <p>Total Marks: {exam.totalMarks}</p>
+
+              </div>
+
+            ))
+
+          )}
 
         </div>
 
       </div>
 
-      {/* HOMEWORK */}
+      <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
-<div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
+        <h2 className="text-3xl font-bold mb-6">
+          Homework
+        </h2>
 
-  <h2 className="text-3xl font-bold mb-6">
-    Homework
-  </h2>
+        <div className="space-y-4">
 
-  <div className="space-y-4">
+          {homeworks.length === 0 ? (
 
-    {homeworks.length === 0 ? (
+            <p className="text-gray-500">
+              No homework assigned
+            </p>
 
-      <p className="text-gray-500">
-        No homework assigned
-      </p>
+          ) : (
 
-    ) : (
+            homeworks.map((hw) => (
 
-      homeworks.map((hw)=>(
+              <div
+                key={hw.id}
+                className="bg-yellow-50 rounded-xl p-5"
+              >
 
-        <div
-          key={hw.id}
-          className="bg-yellow-50 rounded-xl p-5"
-        >
+                <h3 className="text-2xl font-bold">
+                  {hw.title}
+                </h3>
 
-          <h3 className="text-2xl font-bold">
-            {hw.title}
-          </h3>
+                <p className="mt-2">
+                  Subject: {hw.subject}
+                </p>
 
-          <p className="mt-2">
-            Subject:
-            {" "}
-            {hw.subject}
-          </p>
+                <p className="mt-2 text-gray-700">
+                  {hw.description}
+                </p>
 
-          <p className="mt-2 text-gray-700">
-            {hw.description}
-          </p>
+                <p className="text-sm text-gray-500 mt-3">
+                  By: {hw.facultyName}
+                </p>
 
-          <p className="text-sm text-gray-500 mt-3">
-            By:
-            {" "}
-            {hw.facultyName}
-          </p>
+              </div>
+
+            ))
+
+          )}
 
         </div>
 
-      ))
-
-    )}
-
-  </div>
-
-</div>
-
-      {/* RESULTS */}
+      </div>
 
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
@@ -719,8 +626,7 @@ selectedRankingExam
                   </td>
 
                   <td className="p-4">
-                    {result.marks}/
-                    {result.totalMarks}
+                    {result.marks}/{result.totalMarks}
                   </td>
 
                   <td className="p-4">
@@ -738,8 +644,6 @@ selectedRankingExam
         </div>
 
       </div>
-
-      {/* RANKINGS */}
 
       <div className="bg-white rounded-3xl shadow-xl p-6">
 
@@ -812,7 +716,7 @@ selectedRankingExam
             <tbody>
 
               {filteredRankings.map(
-                (student:any, index:number) => (
+                (student: any, index: number) => (
 
                   <tr
                     key={index}

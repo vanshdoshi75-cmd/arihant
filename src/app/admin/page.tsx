@@ -15,7 +15,6 @@ deleteDoc,
 
 import {
   createUserWithEmailAndPassword,
-  signOut,
 } from "firebase/auth";
 
 import { db, auth } from "@/firebase/firebaseConfig";
@@ -464,8 +463,6 @@ error.message
 
 }
 
-await signOut(auth);
-
     setStudentName("");
     setStudentEmail("");
     setStudentContact("");
@@ -716,8 +713,6 @@ try {
   alert("MAIL FETCH ERROR: " + error.message);
 
 }
-
-await signOut(auth);
 
 
    setFacultyName("");

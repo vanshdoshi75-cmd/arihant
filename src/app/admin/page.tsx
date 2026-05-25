@@ -429,7 +429,7 @@ headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-email:studentEmail,
+loginEmail:studentEmail,
 username,
 password
 })

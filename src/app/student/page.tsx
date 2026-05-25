@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+
 import { useRouter } from "next/navigation";
 
 import {
@@ -67,37 +68,43 @@ export default function StudentPage() {
               return;
             }
 
-            const studentQuery =
-              query(
-                collection(db, "students"),
-                where(
-                  "email",
-                  "==",
-                  user.email
-                )
-              );
+            // =========================
+            // LOAD STUDENT - OLD WORKING METHOD
+            // =========================
 
             const studentSnapshot =
-              await getDocs(studentQuery);
+              await getDocs(
+                collection(db, "students")
+              );
 
-            if (studentSnapshot.empty) {
+            let currentStudent: any =
+              null;
 
-              setStudentData(null);
+            studentSnapshot.forEach((docu) => {
+
+              const data = docu.data();
+
+              if (data.email === user.email) {
+
+                currentStudent = {
+                  id: docu.id,
+                  ...data,
+                };
+
+                setStudentData(currentStudent);
+              }
+            });
+
+            if (!currentStudent) {
 
               setAuthLoading(false);
 
               return;
             }
 
-            const studentDoc =
-              studentSnapshot.docs[0];
-
-            const currentStudent: any = {
-              id: studentDoc.id,
-              ...studentDoc.data(),
-            };
-
-            setStudentData(currentStudent);
+            // =========================
+            // LOAD EXAMS
+            // =========================
 
             const examQuery =
               query(
@@ -137,6 +144,10 @@ export default function StudentPage() {
 
             setExams(upcomingOnly);
 
+            // =========================
+            // LOAD HOMEWORK
+            // =========================
+
             const homeworkQuery =
               query(
                 collection(db, "homework"),
@@ -174,9 +185,7 @@ export default function StudentPage() {
                 const statusData =
                   statusSnap.data();
 
-                if (
-                  statusData.status === "done"
-                ) {
+                if (statusData.status === "done") {
 
                   continue;
                 }
@@ -186,6 +195,10 @@ export default function StudentPage() {
             }
 
             setHomeworks(homeworkData);
+
+            // =========================
+            // LOAD RESULTS
+            // =========================
 
             const resultQuery =
               query(
@@ -213,7 +226,11 @@ export default function StudentPage() {
 
             setResults(resultData);
 
-            const batchStudentQuery =
+            // =========================
+            // LOAD RANKINGS
+            // =========================
+
+            const studentQuery =
               query(
                 collection(db, "students"),
                 where(
@@ -223,11 +240,11 @@ export default function StudentPage() {
                 )
               );
 
-            const batchStudentSnap =
-              await getDocs(batchStudentQuery);
+            const studentSnap =
+              await getDocs(studentQuery);
 
             const validStudentIds =
-              batchStudentSnap.docs.map(
+              studentSnap.docs.map(
                 (docu) => docu.id
               );
 
@@ -327,7 +344,10 @@ export default function StudentPage() {
         (a, b) => b.total - a.total
       );
 
-    }, [rankings, selectedRankingExam]);
+    }, [
+      rankings,
+      selectedRankingExam,
+    ]);
 
   const totalObtained =
     filteredResults.reduce(
@@ -373,6 +393,8 @@ export default function StudentPage() {
 
     <main className="min-h-screen bg-[#F8F4EF] p-3 md:p-6">
 
+      {/* PROFILE */}
+
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
         <h1 className="text-2xl md:text-5xl font-bold text-[#5A1E1E]">
@@ -391,6 +413,8 @@ export default function StudentPage() {
         </p>
 
       </div>
+
+      {/* ATTENDANCE OVERVIEW */}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-8 mb-10">
 
@@ -444,6 +468,8 @@ export default function StudentPage() {
 
       </div>
 
+      {/* UPCOMING EXAMS */}
+
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
         <h2 className="text-3xl font-bold mb-6">
@@ -471,11 +497,17 @@ export default function StudentPage() {
                   {exam.examName}
                 </h3>
 
-                <p>Subject: {exam.subject}</p>
+                <p>
+                  Subject: {exam.subject}
+                </p>
 
-                <p>Date: {exam.examDate}</p>
+                <p>
+                  Date: {exam.examDate}
+                </p>
 
-                <p>Total Marks: {exam.totalMarks}</p>
+                <p>
+                  Total Marks: {exam.totalMarks}
+                </p>
 
               </div>
 
@@ -486,6 +518,8 @@ export default function StudentPage() {
         </div>
 
       </div>
+
+      {/* HOMEWORK */}
 
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
@@ -535,6 +569,8 @@ export default function StudentPage() {
         </div>
 
       </div>
+
+      {/* RESULTS */}
 
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
@@ -644,6 +680,8 @@ export default function StudentPage() {
         </div>
 
       </div>
+
+      {/* RANKINGS */}
 
       <div className="bg-white rounded-3xl shadow-xl p-6">
 

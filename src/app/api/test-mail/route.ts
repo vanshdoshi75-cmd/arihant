@@ -1,38 +1,41 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+const resend = new Resend(
+  process.env.RESEND_API_KEY
+);
 
 export async function GET() {
-  try {
-    const transporter = nodemailer.createTransport({
-  host: "142.250.102.108",
-  port: 587,
-  secure: false,
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
-  tls: {
-    servername: "smtp.gmail.com",
-  },
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: "manibhadra809@gmail.com",
-      subject: "TEST MAIL",
-      text: "MAIL WORKING SUCCESSFULLY",
-    });
+  try {
+
+    const data =
+      await resend.emails.send({
+
+        from:
+          "Arihant Coaching <onboarding@resend.dev>",
+
+        to:
+          "manibhadra809@gmail.com",
+
+        subject:
+          "TEST MAIL",
+
+        html:
+          "<h1>MAIL WORKING SUCCESSFULLY</h1>",
+
+      });
 
     return Response.json({
       success: true,
-      message: "Mail sent",
+      data,
     });
+
   } catch (error: any) {
+
     return Response.json({
       success: false,
       error: error.message,
     });
+
   }
 }

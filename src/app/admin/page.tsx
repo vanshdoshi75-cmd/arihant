@@ -420,7 +420,9 @@ Password: ${password}`
 
 // SEND MAIL IN BACKGROUND
 
-fetch(
+try {
+
+const res = await fetch(
 "/api/send-mail",
 {
 method:"POST",
@@ -433,15 +435,16 @@ username,
 password
 })
 }
-)
-.then((res)=>res.json())
-.then((data)=>{
+);
 
-console.log("MAIL:",data);
+const data =
+await res.json();
+
+console.log(data);
 
 if(data.success){
 
-alert("Mail Sent Successfully");
+console.log("MAIL SENT");
 
 }else{
 
@@ -452,10 +455,14 @@ data.error
 
 }
 
-})
-.catch((error)=>{
-console.log(error);
-});
+}catch(error:any){
+
+alert(
+"MAIL FETCH ERROR: " +
+error.message
+);
+
+}
 
 await signOut(auth);
 
@@ -688,7 +695,7 @@ try {
         "Content-Type":"application/json"
       },
       body:JSON.stringify({
-        email:studentEmail,
+        email:facultyEmail,
         username,
         password
       })

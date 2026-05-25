@@ -423,7 +423,7 @@ Password: ${password}`
 try {
 
 const res = await fetch(
-"/api/send-mail",
+"https://arihant-2iqu.onrender.com/api/send-mail",
 {
 method:"POST",
 headers:{
@@ -688,7 +688,7 @@ Password: ${password}`
 try {
 
   const mailRes = await fetch(
-    "/api/send-mail",
+    "https://arihant-2iqu.onrender.com/api/send-mail",
     {
       method:"POST",
       headers:{

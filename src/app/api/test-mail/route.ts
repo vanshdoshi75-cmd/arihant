@@ -12,10 +12,10 @@ export async function GET() {
       await resend.emails.send({
 
         from:
-          "Arihant Coaching <onboarding@resend.dev>",
+          "Arihant Coaching <vanshdoshi75@gmail.com>",
 
         to:
-          "manibhadra809@gmail.com",
+          "vanshdoshi75@gmail.com",
 
         subject:
           "TEST MAIL",

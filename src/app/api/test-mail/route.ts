@@ -10,9 +10,8 @@ export async function GET() {
 
     const data =
       await resend.emails.send({
-
         from:
-          "Arihant Coaching <vanshdoshi75@gmail.com>",
+          "Arihant Coaching <onboarding@resend.dev>",
 
         to:
           "vanshdoshi75@gmail.com",
@@ -22,13 +21,9 @@ export async function GET() {
 
         html:
           "<h1>MAIL WORKING SUCCESSFULLY</h1>",
-
       });
 
-    return Response.json({
-      success: true,
-      data,
-    });
+    return Response.json(data);
 
   } catch (error: any) {
 

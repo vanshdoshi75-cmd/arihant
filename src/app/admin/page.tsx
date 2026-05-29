@@ -13,10 +13,6 @@ doc,
 deleteDoc,
 } from "firebase/firestore";
 
-import {
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
-
 import { db, auth } from "@/firebase/firebaseConfig";
 
 import BatchCard from "@/components/admin/BatchCard";
@@ -358,15 +354,25 @@ const addStudent = async () => {
       .substring(2,5);
 
     // firebase auth account
-    const userCredential =
-      await createUserWithEmailAndPassword(
-        auth,
-        studentEmail,
-        password
-      );
+    const userResponse = await fetch("/api/create-user", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    email: studentEmail,
+    password,
+  }),
+});
 
-    const uid =
-      userCredential.user.uid;
+const userData = await userResponse.json();
+
+if (!userData.success) {
+  alert(userData.error);
+  return;
+}
+
+const uid = userData.uid;
 
     const batchData =
       batches.find(
@@ -633,14 +639,25 @@ Math.random()
 .toString(36)
 .substring(2,5);
 
-const userCredential =
-await createUserWithEmailAndPassword(
-   auth,
-   facultyEmail,
-   password
-);
-   const uid=
-   userCredential.user.uid;
+const userResponse = await fetch("/api/create-user", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    email: facultyEmail,
+    password,
+  }),
+});
+
+const userData = await userResponse.json();
+
+if (!userData.success) {
+  alert(userData.error);
+  return;
+}
+
+const uid = userData.uid;
 
    await addDoc(
       collection(

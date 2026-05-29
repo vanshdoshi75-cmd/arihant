@@ -1077,6 +1077,38 @@ alert(
 
 };
 
+const deleteBatch = async (
+  batchId: string,
+  batchName: string
+) => {
+
+  const confirmDelete =
+    window.confirm(
+      `Are you sure you want to delete ${batchName}?`
+    );
+
+  if (!confirmDelete) return;
+
+  try {
+
+    await deleteDoc(
+      doc(db, "batches", batchId)
+    );
+
+    alert("Batch deleted successfully");
+
+    setSelectedBatch(null);
+
+    loadBatches();
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert("Error deleting batch");
+  }
+};
+
   return (
 
    <main className="min-h-screen bg-[#F8F4EF] p-3 md:p-6">
@@ -1137,7 +1169,7 @@ alert(
 
           </select>
 
-          <div className="flex gap-2 md:col-span-2">
+          <div className="flex flex-col md:flex-row gap-2 md:col-span-2">
 
             <input
               type="text"
@@ -1153,7 +1185,7 @@ alert(
 
             <button
               onClick={addSubject}
-              className="bg-blue-600 text-white px-6 rounded-xl"
+              className="w-full md:w-auto bg-blue-600 text-white px-6 py-3 rounded-xl"
             >
               Add
             </button>
@@ -1591,9 +1623,23 @@ Remove
       }`}
     >
 
-      <BatchCard
-        batch={batch}
-      />
+<BatchCard
+  batch={batch}
+/>
+
+<button
+  onClick={(e) => {
+    e.stopPropagation();
+
+    deleteBatch(
+      batch.id,
+      batch.name
+    );
+  }}
+  className="w-full bg-red-600 text-white px-5 py-3 rounded-b-3xl"
+>
+  Delete Batch
+</button>
 
     </div>
 

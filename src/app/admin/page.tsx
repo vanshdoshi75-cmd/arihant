@@ -422,14 +422,14 @@ Password: ${password}`
 try {
 
 const res = await fetch(
-"https://arihant-2iqu.onrender.com/api/send-mail",
+"/api/send-mail",
 {
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-loginEmail:studentEmail,
+email:studentEmail,
 username,
 password
 })
@@ -685,7 +685,7 @@ Password: ${password}`
 try {
 
   const mailRes = await fetch(
-    "https://arihant-2iqu.onrender.com/api/send-mail",
+    "/api/send-mail",
     {
       method:"POST",
       headers:{

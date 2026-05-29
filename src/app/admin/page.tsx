@@ -1169,28 +1169,19 @@ const deleteBatch = async (
 
           </select>
 
-          <div className="flex flex-col md:flex-row gap-2 md:col-span-2">
+          <div className="flex flex-col md:flex-row gap-2">
+  <input
+    type="text"
+    className="border p-3 rounded-xl flex-1"
+    placeholder="Add Subject"
+  />
 
-            <input
-              type="text"
-              placeholder="Add Subject"
-              className="border p-4 rounded-xl flex-1"
-              value={subjectInput}
-              onChange={(e) =>
-                setSubjectInput(
-                  e.target.value
-                )
-              }
-            />
-
-            <button
-              onClick={addSubject}
-              className="w-full md:w-auto bg-blue-600 text-white px-6 py-3 rounded-xl"
-            >
-              Add
-            </button>
-
-          </div>
+  <button
+    className="w-full md:w-auto bg-blue-600 text-white px-6 py-3 rounded-xl"
+  >
+    Add
+  </button>
+</div>
 
         </div>
 
@@ -2099,9 +2090,6 @@ Delete
       )}
 
     </div>
-
-
-)
 
       {/* ========================= */}
       {/* MODALS */}

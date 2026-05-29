@@ -15,6 +15,10 @@ deleteDoc,
 
 import { db, auth } from "@/firebase/firebaseConfig";
 
+import {
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+
 import BatchCard from "@/components/admin/BatchCard";
 
 import StudentCard from "@/components/admin/StudentCard";
@@ -354,25 +358,15 @@ const addStudent = async () => {
       .substring(2,5);
 
     // firebase auth account
-    const userResponse = await fetch("/api/create-user", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    email: studentEmail,
-    password,
-  }),
-});
+const userCredential =
+  await createUserWithEmailAndPassword(
+    auth,
+    studentEmail,
+    password
+  );
 
-const userData = await userResponse.json();
-
-if (!userData.success) {
-  alert(userData.error);
-  return;
-}
-
-const uid = userData.uid;
+const uid =
+  userCredential.user.uid;
 
     const batchData =
       batches.find(
@@ -423,68 +417,21 @@ Username: ${username}
 Password: ${password}`
 );
 
-// SEND MAIL IN BACKGROUND
+setStudentName("");
+setStudentEmail("");
+setStudentContact("");
+setStudentBatch("");
 
-try {
+} catch(error:any){
 
-const res = await fetch(
-`${window.location.origin}/api/send-mail`,
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-email:studentEmail,
-username,
-password
-})
-}
-);
+  console.log(error);
 
-const data =
-await res.json();
-
-console.log(data);
-
-if(data.success){
-
-console.log("MAIL SENT");
-
-}else{
-
-alert(
-"MAIL ERROR: " +
-data.error
-);
+  alert(error.message);
 
 }
-
-}catch(error:any){
-
-alert(
-"MAIL FETCH ERROR: " +
-error.message
-);
-
-}
-
-    setStudentName("");
-    setStudentEmail("");
-    setStudentContact("");
-    setStudentBatch("");
-
-  }
-
-  catch(error:any){
-
-    console.log(error);
-
-    alert(error.message);
-
-  }
 
 };
+
 
   // =========================
   // HANDLE FACULTY BATCH
@@ -639,25 +586,15 @@ Math.random()
 .toString(36)
 .substring(2,5);
 
-const userResponse = await fetch("/api/create-user", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    email: facultyEmail,
-    password,
-  }),
-});
+const userCredential =
+  await createUserWithEmailAndPassword(
+    auth,
+    facultyEmail,
+    password
+  );
 
-const userData = await userResponse.json();
-
-if (!userData.success) {
-  alert(userData.error);
-  return;
-}
-
-const uid = userData.uid;
+const uid =
+  userCredential.user.uid;
 
    await addDoc(
       collection(
@@ -697,62 +634,26 @@ Username: ${username}
 Password: ${password}`
 );
 
-// SEND MAIL IN BACKGROUND
+setFacultyName("");
 
-try {
+setFacultyEmail("");
 
-  const mailRes = await fetch(
-    `${window.location.origin}/api/send-mail`,
-    {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body:JSON.stringify({
-        email:facultyEmail,
-        username,
-        password
-      })
-    }
-  );
+setFacultyAssignments([]);
 
-  const mailData =
-    await mailRes.json();
+setFacultyBatch("");
 
-  console.log("MAIL:", mailData);
+setSelectedSubjects([]);
 
-  if(!mailData.success){
-    alert("MAIL ERROR: " + mailData.error);
-  }
-
-} catch(error:any) {
-
-  alert("MAIL FETCH ERROR: " + error.message);
-
-}
-
-
-   setFacultyName("");
-
-   setFacultyEmail("");
-
-   setFacultyAssignments([]);
-
-   setFacultyBatch("");
-
-   setSelectedSubjects([]);
-
- } catch(error:any){
+} catch(error:any){
 
    console.log(error);
 
    alert(
      error.message
    );
- }
-};
+}
 
-
+  };
 
   // =========================
 // LOAD ATTENDANCE STUDENTS

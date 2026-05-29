@@ -422,7 +422,7 @@ Password: ${password}`
 try {
 
 const res = await fetch(
-"/api/send-mail",
+`${window.location.origin}/api/send-mail`,
 {
 method:"POST",
 headers:{
@@ -685,7 +685,7 @@ Password: ${password}`
 try {
 
   const mailRes = await fetch(
-    "/api/send-mail",
+    `${window.location.origin}/api/send-mail`,
     {
       method:"POST",
       headers:{

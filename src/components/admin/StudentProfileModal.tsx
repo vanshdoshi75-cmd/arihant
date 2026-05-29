@@ -66,13 +66,13 @@ Please keep it safe.`;
 
   return (
 
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+    <div className="bg-white rounded-3xl p-8 w-full max-w-4xl">
 
-      <div className="bg-white rounded-3xl p-6 w-full max-w-3xl">
+      <div className="bg-white rounded-3xl p-4 md:p-8 w-full max-w-4xl my-6">
 
         <div className="flex items-center justify-between mb-6">
 
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-2xl md:text-4xl font-bold">
             Student Profile
           </h2>
 
@@ -85,7 +85,7 @@ Please keep it safe.`;
 
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
           <div>
             <p className="font-bold mb-2">Name</p>
@@ -163,7 +163,7 @@ Please keep it safe.`;
 
         </div>
 
-        <div className="grid md:grid-cols-3 gap-4 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
 
           <div className="bg-green-50 p-4 rounded-xl">
             <p>Total Present</p>
@@ -204,21 +204,21 @@ Please keep it safe.`;
 
           <button
             onClick={saveStudent}
-            className="bg-[#5A1E1E] text-white px-6 py-3 rounded-xl"
+            className="w-full md:w-auto bg-[#5A1E1E] text-white px-6 py-3 rounded-xl"
           >
             Save Changes
           </button>
 
           <button
             onClick={sendWhatsapp}
-            className="bg-green-600 text-white px-6 py-3 rounded-xl"
+            className="w-full md:w-auto bg-green-600 text-white px-6 py-3 rounded-xl"
           >
             Send Login on WhatsApp
           </button>
 
           <button
             onClick={onClose}
-            className="bg-gray-300 px-6 py-3 rounded-xl"
+            className="w-full md:w-auto bg-gray-300 px-6 py-3 rounded-xl"
           >
             Close
           </button>

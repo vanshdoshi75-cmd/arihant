@@ -1095,7 +1095,7 @@ alert(
           Create Batch
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
           <select
             className="border p-4 rounded-xl"
@@ -1209,7 +1209,7 @@ alert(
           Add Student
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
           <input
             type="text"
@@ -1294,7 +1294,7 @@ e.target.value
           Add Faculty
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
           <input
             type="text"
@@ -1381,7 +1381,7 @@ subject
 onClick={
 addFacultyAssignment
 }
-className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-xl"
+className="w-full md:w-auto mt-6 bg-blue-600 text-white px-6 py-3 rounded-xl"
 >
 Add Batch Assignment
 </button>
@@ -1492,7 +1492,7 @@ Remove
 
           <div
             key={student.id}
-            className="border rounded-2xl p-4 flex items-center justify-between"
+            className="border rounded-2xl p-4 flex flex-col md:flex-row gap-4 md:items-center md:justify-between"
           >
 
             <div>
@@ -1575,7 +1575,7 @@ Remove
           All Batches
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
   {batches.map((batch) => (
 
@@ -1724,7 +1724,7 @@ Remove
 
 <div className="bg-white rounded-3xl shadow-xl p-6">
 
-  <div className="flex items-center justify-between mb-6">
+  <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between mb-6"></div>
 
     <h2 className="text-2xl md:text-3xl font-bold">
       Students
@@ -1738,7 +1738,7 @@ Remove
 
   {students.length > 0 ? (
 
-    <div className="grid md:grid-cols-2 gap-5">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
       {students.map((student,index) => (
 
@@ -1773,7 +1773,7 @@ Remove
 onClick={() =>
 setSelectedStudent(student)
 }
-className="bg-[#5A1E1E] text-white px-5 py-3 rounded-xl"
+className="w-full md:w-auto bg-[#5A1E1E] text-white px-8 py-4 rounded-xl"
 >
 View & Edit
 </button>
@@ -1878,14 +1878,15 @@ Delete
   )}
 
 </div>
+)};
 
-    {/* ========================= */}
+  {/* ========================= */}
     {/* FACULTY */}
     {/* ========================= */}
 
     <div className="bg-white rounded-3xl shadow-xl p-6">
 
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between mb-6">
 
         <h2 className="text-2xl md:text-3xl font-bold">
           Faculty
@@ -2003,10 +2004,7 @@ Delete
               </div>
 
               {/* BUTTONS */}
-
-              <div className="flex gap-3 mt-6">
-
-                <div className="flex gap-3 mt-6">
+<div className="flex flex-col md:flex-row gap-3 mt-6">
 
 <button
 onClick={() =>
@@ -2020,7 +2018,7 @@ View Profile
 </button>
 
 <button
-className="bg-[#5A1E1E] text-white px-5 py-3 rounded-xl"
+className="w-full md:w-auto bg-[#5A1E1E] text-white px-8 py-4 rounded-xl"
 >
 Save Changes
 </button>
@@ -2041,7 +2039,6 @@ Delete
 
               </div>
 
-            </div>
 
           ))}
 
@@ -2057,9 +2054,8 @@ Delete
 
     </div>
 
-  </div>
 
-)}
+)
 
       {/* ========================= */}
       {/* MODALS */}

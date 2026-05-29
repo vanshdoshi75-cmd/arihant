@@ -472,7 +472,7 @@ export default function StudentPage() {
 
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
-        <h2 className="text-3xl font-bold mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6">
           Upcoming Exams
         </h2>
 
@@ -523,7 +523,7 @@ export default function StudentPage() {
 
       <div className="bg-white rounded-3xl shadow-xl p-6 mb-10">
 
-        <h2 className="text-3xl font-bold mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6">
           Homework
         </h2>
 
@@ -576,7 +576,7 @@ export default function StudentPage() {
 
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6">
             Results
           </h2>
 
@@ -616,9 +616,9 @@ export default function StudentPage() {
 
         </div>
 
-        <div className="overflow-auto">
+        <div className="overflow-x-auto">
 
-          <table className="w-full">
+          <table className="w-full min-w-[600px]">
 
             <thead className="bg-[#5A1E1E] text-white">
 
@@ -687,7 +687,7 @@ export default function StudentPage() {
 
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6">
             Batch Rankings
           </h2>
 
@@ -727,9 +727,9 @@ export default function StudentPage() {
 
         </div>
 
-        <div className="overflow-auto">
+        <div className="overflow-x-auto">
 
-          <table className="w-full">
+          <table className="w-full min-w-[600px]">
 
             <thead className="bg-[#5A1E1E] text-white">
 

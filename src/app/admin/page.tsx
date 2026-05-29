@@ -1065,6 +1065,22 @@ const deleteBatch = async (
   batchName: string
 ) => {
 
+  const studentQuery =
+    query(
+      collection(db, "students"),
+      where("batchId", "==", batchId)
+    );
+
+  const studentSnapshot =
+    await getDocs(studentQuery);
+
+  if (!studentSnapshot.empty) {
+    alert(
+      "Cannot delete batch. First delete or shift all students from this batch."
+    );
+    return;
+  }
+
   const confirmDelete =
     window.confirm(
       `Are you sure you want to delete ${batchName}?`
@@ -1073,7 +1089,6 @@ const deleteBatch = async (
   if (!confirmDelete) return;
 
   try {
-
     await deleteDoc(
       doc(db, "batches", batchId)
     );
@@ -1085,9 +1100,7 @@ const deleteBatch = async (
     loadBatches();
 
   } catch (error) {
-
     console.log(error);
-
     alert("Error deleting batch");
   }
 };

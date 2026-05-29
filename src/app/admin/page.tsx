@@ -102,10 +102,6 @@ const [attendanceData,
     setStudentName] =
     useState("");
 
-  const [studentEmail,
-    setStudentEmail] =
-    useState("");
-
   const [studentContact,
     setStudentContact] =
     useState("");
@@ -122,9 +118,9 @@ const [attendanceData,
     setFacultyName] =
     useState("");
 
-  const [facultyEmail,
-    setFacultyEmail] =
-    useState("");
+const [facultyContact,
+  setFacultyContact] =
+  useState("");
 
   const [facultyBatch,setFacultyBatch]=
 useState("");
@@ -331,7 +327,6 @@ const addStudent = async () => {
 
     if(
       !studentName ||
-      !studentEmail ||
       !studentContact ||
       !studentBatch
     ){
@@ -341,10 +336,7 @@ const addStudent = async () => {
 
     // auto username
     const username =
-      studentName
-      .toLowerCase()
-      .replace(/\s/g,"")
-      +"@arihant.com";
+  studentContact + "@arihant.com";
 
     // unique password
     const password =
@@ -361,7 +353,7 @@ const addStudent = async () => {
 const userCredential =
   await createUserWithEmailAndPassword(
     auth,
-    studentEmail,
+    username,
     password
   );
 
@@ -380,8 +372,6 @@ const uid =
         uid,
 
         name:studentName,
-
-        email:studentEmail,
 
 username,
 
@@ -418,7 +408,6 @@ Password: ${password}`
 );
 
 setStudentName("");
-setStudentEmail("");
 setStudentContact("");
 setStudentBatch("");
 
@@ -570,11 +559,8 @@ const addFacultyAssignment =
       return;
    }
 
-   const username =
-facultyName
-.toLowerCase()
-.replace(/\s/g,"")
-+ "@arihant.com";
+const username =
+  facultyContact + "@arihant.com";
 
 const password =
 "Fac" +
@@ -589,7 +575,7 @@ Math.random()
 const userCredential =
   await createUserWithEmailAndPassword(
     auth,
-    facultyEmail,
+    username,
     password
   );
 
@@ -607,9 +593,6 @@ const uid =
 
         name:
         facultyName,
-
-        email:
-        facultyEmail,
 
         username,
 
@@ -636,7 +619,7 @@ Password: ${password}`
 
 setFacultyName("");
 
-setFacultyEmail("");
+setFacultyContact("");
 
 setFacultyAssignments([]);
 
@@ -1245,18 +1228,6 @@ const deleteBatch = async (
               )
             }
           />
-
-          <input
-type="email"
-placeholder="Student Gmail"
-className="border p-4 rounded-xl"
-value={studentEmail}
-onChange={(e)=>
-setStudentEmail(
-e.target.value
-)
-}
-/>
           <input
             type="text"
             placeholder="Contact"
@@ -1332,16 +1303,16 @@ e.target.value
           />
 
           <input
-            type="email"
-            placeholder="Faculty Email"
-            className="border p-4 rounded-xl"
-            value={facultyEmail}
-            onChange={(e) =>
-              setFacultyEmail(
-                e.target.value
-              )
-            }
-          />
+  type="text"
+  placeholder="Faculty Contact"
+  className="border p-4 rounded-xl"
+  value={facultyContact}
+  onChange={(e) =>
+    setFacultyContact(
+      e.target.value
+    )
+  }
+/>
 
           <select
             className="border p-4 rounded-xl"
@@ -1965,20 +1936,20 @@ Delete
                 />
 
                 <input
-                  type="email"
-                  value={faculty.email}
-                  onChange={(e) => {
+  type="text"
+  value={faculty.contact || ""}
+  onChange={(e) => {
 
-                    const updated =
-                      [...facultyList];
+    const updated =
+      [...facultyList];
 
-                    updated[index].email =
-                      e.target.value;
+    updated[index].contact =
+      e.target.value;
 
-                    setFacultyList(updated);
-                  }}
-                  className="w-full border p-3 rounded-xl"
-                />
+    setFacultyList(updated);
+  }}
+  className="w-full border p-3 rounded-xl"
+/>
 
               </div>
 
